@@ -1,0 +1,2 @@
+from .bokeh import scatterplot
+
