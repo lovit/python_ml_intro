@@ -1,13 +1,17 @@
 import numpy as np
 
-def make_linear_regression_data(n_data=100, a=1.0, b=1.0, noise=1.0, x_range=(-10.0, 10.0)):
+def make_linear_regression(n_data=100, a=1.0, b=1.0, noise=1.0, x_range=(-10.0, 10.0)):
     """
-    :param int n_data: 생성할 데이터 개수
-    :param float a: y = ax + b 에서의 선형회귀계수 a
-    :param float b: y = ax + b 에서의 y 절편 b
-    :param float noise: e = y - (ax + b) 에서의 e 의 분포 범위
-    :param tuple x_range: (float, float) 형식의 x 값 범위
-    :return x, y: n_data 개수의 1차원 데이터
+    It generates artificial data for linear regression
+
+    :param int n_data: Number of generated data
+    :param float a: Regression coefficient a in 'y = ax + b'
+    :param float b: Interpret coefficient b in 'y = ax + b'
+    :param float noise: Range of residual, e = y - (ax + b)
+    :param tuple x_range: size = (float, float)
+    :returns: x, y
+        - x : numpy.ndarray, shape = (n_data,)
+        - y : numpy.ndarray, shape = (n_data,)
 
     Usage
 
