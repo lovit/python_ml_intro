@@ -1,6 +1,6 @@
 import numpy as np
 
-def make_linear_regression(n_data=100, a=1.0, b=1.0, noise=1.0, x_range=(-10.0, 10.0)):
+def make_linear_regression_data(n_data=100, a=1.0, b=1.0, noise=1.0, x_range=(-10.0, 10.0)):
     """
     It generates artificial data for linear regression
 
