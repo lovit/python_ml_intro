@@ -197,3 +197,68 @@ def scatterplot(data, labels=None, colors=None, p=None, title=None,
                 fill_color=color, alpha=alpha, legend_label=legend)
 
     return p
+
+def overlay_regression_line(x, model, p, n_steps=2, margin=0.025,
+    legend=None, line_dash=(4,4), line_color='orange', line_width=2):
+
+    """
+    :param numpy.ndarray x: x value or range of x
+        If x stands for x-range, the length of x must be 2
+        If x is instance of numpy.ndarray, the x must be column vector
+    :param model model: float value predicative model
+        All functions are possilble to use if it works like
+
+            y = model(x)
+
+    :param bokeh.plotting.figure.Figure p: Figure to overlay line
+    :param int n_steps: The number of points in x
+        If works only when x is range
+    :param float margin: x_ramge margin
+    :param str legend: Line legend
+    :param tuple line_dash: bokeh.core.properties.DashPattern
+    :param str line_color: Color code
+    :param int line_width: Width of regression line
+
+    :returns: p
+        Bokeh figure which ovelayed regerssion line
+
+    Usgae
+    -----
+        Draw base scatter plot
+
+        >>> p = scatterplot((x, y), colors='#323232')
+
+        With dummy model
+
+        >>> model = lambda x: 1.0 * x + 1.0
+        >>> p = overlay_regression_line(x, model, p, n_steps=5, legend='test')
+        >>> show(p)
+    """
+
+    if p is None:
+        raise ValueError('p must be Bokeh Figure')
+    if isinstance(x, np.ndarray):
+        if len(x.shape) > 1:
+            raise ValueError(f'x must be column vector, however the dimension of x is {x.shape[1]}')
+        if x.shape[0] == 2:
+            margin = margin * (x[1] - x[0])
+            x_min, x_max = x
+    elif len(x) != 2:
+        raise ValueError(f'x must be numpy.ndarray column vector or range, however the length of x is {len(x)}')
+    else:
+        x_min, x_max = x
+
+    if 'x_min' in locals():
+        x_min, x_max = x_min - margin, x_max + margin
+        x_ = np.linspace(x_min, x_max, n_steps)
+    else:
+        x_ = x.copy()
+        x_.sort()
+
+    y_pred = model(x_)
+
+    if legend is None:
+        p.line(x_, y_pred, line_dash=line_dash, line_color=line_color, line_width=line_width)
+    else:
+        p.line(x_, y_pred, line_dash=line_dash, line_color=line_color, line_width=line_width, legend_label=legend)
+    return p
