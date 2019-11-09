@@ -1,5 +1,5 @@
-np>=1.15.4
-torch>=1.2.0
-sklearn>=0.21.3
-pandas>=0.23.4
 bokeh>=1.4.0
+numpy>=1.15.4
+pandas>=0.23.4
+scikit-learn>=0.21.3
+torch>=1.2.0
