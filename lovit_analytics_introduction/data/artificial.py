@@ -35,14 +35,14 @@ def make_linear_regression_data(n_data=100, a=1.0, b=1.0,
     return x, y
 
 def make_polynomial_regression_data(n_data=100, degree=2, coefficients=None,
-    scale=3.0, noise=0.1, x_range=(-1.0, 1.0), random_seed=None):
+    coefficient_scale=3.0, noise=0.1, x_range=(-1.0, 1.0), random_seed=None):
     """
     It generates artificial data for linear regression
 
     :param int n_data: Number of generated data
     :param int degree: Degree of polynomial
     :param list_or_None coefficients: Coefficients bi such that y = b0 + sum_{i=1 to degree} bi x x^i
-    :param float scale: Range of coefficients bi.
+    :param float coefficient_scale: Range of coefficients bi.
         Default is 1.0
     :param float noise: Range of residual, e = y - f(x)
     :param tuple x_range: size = (float, float)
@@ -66,7 +66,7 @@ def make_polynomial_regression_data(n_data=100, degree=2, coefficients=None,
         np.random.seed(random_seed)
 
     if coefficients is None:
-        coefficients = scale * (np.random.random_sample(degree + 1) - 0.5)
+        coefficients = coefficient_scale * (np.random.random_sample(degree + 1) - 0.5)
 
     len_coef = len(coefficients)
     if len_coef != degree + 1:
