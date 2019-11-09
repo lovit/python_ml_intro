@@ -154,6 +154,13 @@ def scatterplot(data, labels=None, colors=None, p=None, title=None,
 
     assert 0 < alpha <= 1
 
+    if isinstance(data, list) or isinstance(data, tuple):
+        if (len(data) != 2):
+            raise ValueError('"data" must be 2D vectors or tuple of two column vector')
+        len_x, len_y = data[0].shape[0], data[1].shape[0]
+        if len_x != len_y:
+            raise ValueError(f'Two column vector have to be same length, but ({len_x, len_y})')
+        data = np.vstack(data).transpose()
     n_data, dim = data.shape
     if dim != 2:
         raise ValueError(f'data must be (n_data, 2) shape, but {data.shape}')
