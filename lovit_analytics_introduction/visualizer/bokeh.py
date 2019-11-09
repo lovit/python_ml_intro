@@ -37,6 +37,8 @@ def prepare_colors(labels, colors):
 
     # check inserted colors
     if colors is not None:
+        if isinstance(colors, str):
+            colors = [colors] * n_labels
         if len(colors) < n_labels:
             raise ValueError(f'There exists {n_labels}.'\
                              ' However, the length of colors is too short')
