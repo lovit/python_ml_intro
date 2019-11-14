@@ -238,24 +238,27 @@ def overlay_regression_line(x, model, p, n_steps=2, margin=0.025,
     if p is None:
         raise ValueError('p must be Bokeh Figure')
     if isinstance(x, np.ndarray):
-        if len(x.shape) > 1:
-            raise ValueError(f'x must be column vector, however the dimension of x is {x.shape[1]}')
-        if x.shape[0] == 2:
-            margin = margin * (x[1] - x[0])
-            x_min, x_max = x
+        if len(x.shape) == 1:
+            x = x.reshape(-1,1)
+        elif len(x.shape) > 2:
+            raise ValueError(f'x must be vector not tensor, however the shape of input is {x.shape}')
+        if x.shape[1] > 1:
+            raise ValueError(f'x must be 1D data, however the shape of input is {x.shape}')
+        x_ = x.copy()
+        x_.sort(axis=0)
     elif len(x) != 2:
         raise ValueError(f'x must be numpy.ndarray column vector or range, however the length of x is {len(x)}')
     else:
         x_min, x_max = x
-
-    if 'x_min' in locals():
         x_min, x_max = x_min - margin, x_max + margin
-        x_ = np.linspace(x_min, x_max, n_steps)
-    else:
-        x_ = x.copy()
-        x_.sort()
+        x_ = np.linspace(x_min, x_max, n_steps).reshape(-1,1)
 
+    # (n_data, 1) -> (n_data, 1)
     y_pred = model(x_)
+
+    # as column vector
+    x_ = x_.reshape(-1)
+    y_pred = y_pred.reshape(-1)
 
     if legend is None:
         p.line(x_, y_pred, line_dash=line_dash, line_color=line_color, line_width=line_width)
