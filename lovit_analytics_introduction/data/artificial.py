@@ -15,11 +15,12 @@ def make_linear_regression_data(n_data=100, a=1.0, b=1.0,
     :returns: x, y
         - x : numpy.ndarray, shape = (n_data,)
         - y : numpy.ndarray, shape = (n_data,)
+        - y_true : numpy.ndarray, shape = (n_data,)
 
     Usage
 
-        >>> x, y = make_linear_regression_data()
-        >>> x, y = make_linear_regression_data(
+        >>> x, y, _ = make_linear_regression_data()
+        >>> x, y, y_true = make_linear_regression_data(
             n_data=100, a=1.0, b=1.0, noise=1.0, x_range=(-10.0, 10.0))
     """
 
@@ -32,7 +33,8 @@ def make_linear_regression_data(n_data=100, a=1.0, b=1.0,
     x = np.random.random_sample(n_data) * x_scale + x_range[0]
     residual = (np.random.random_sample(n_data) - 0.5) * noise
     y = a * x + b + residual
-    return x, y
+    y_true = a * x + b
+    return x, y, y_true
 
 def make_polynomial_regression_data(n_data=100, degree=2, coefficients=None,
     coefficient_scale=3.0, noise=0.1, x_range=(-1.0, 1.0), random_seed=None):
@@ -51,11 +53,12 @@ def make_polynomial_regression_data(n_data=100, degree=2, coefficients=None,
     :returns: x, y
         - x : numpy.ndarray, shape = (n_data,)
         - y : numpy.ndarray, shape = (n_data,)
+        - y_true : numpy.ndarray, shape = (n_data,)
 
     Usage
 
-        >>> x, y = make_linear_regression()
-        >>> x, y = make_linear_regression(
+        >>> x, y, _ = make_linear_regression()
+        >>> x, y, y_true = make_linear_regression(
             n_data=100, a=1.0, b=1.0, noise=1.0, x_range=(-10.0, 10.0))
     """
 
@@ -76,9 +79,9 @@ def make_polynomial_regression_data(n_data=100, degree=2, coefficients=None,
     x_scale = x_range[1] - x_range[0]
     x = np.random.random_sample(n_data) * x_scale + x_range[0]
 
-    y = np.zeros(n_data)
+    y_true = np.zeros(n_data)
     for p, coef in enumerate(coefficients):
-        y = y + coef * np.power(x, p)
+        y_true = y_true + coef * np.power(x, p)
     residual = (np.random.random_sample(n_data) - 0.5) * noise
-    y = y + residual
-    return x, y
+    y = y_true + residual
+    return x, y, y_true
