@@ -249,8 +249,6 @@ def overlay_regression_line(x, model_or_y, p, n_steps=2, margin=0.025,
         x_ = x.copy()
         sorting_indices = x_.argsort(axis=0).reshape(-1)
         x_ = x_[sorting_indices]
-        print(x_.shape)
-        print(sorting_indices.shape)
     elif len(x) != 2:
         raise ValueError(f'x must be numpy.ndarray column vector or range, however the length of x is {len(x)}')
     else:
