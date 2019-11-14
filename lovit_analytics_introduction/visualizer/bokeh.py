@@ -198,17 +198,19 @@ def scatterplot(data, labels=None, colors=None, p=None, title=None,
 
     return p
 
-def overlay_regression_line(x, model, p, n_steps=2, margin=0.025,
+def overlay_regression_line(x, model_or_y, p, n_steps=2, margin=0.025,
     legend=None, line_dash=(4,4), line_color='orange', line_width=2):
 
     """
     :param numpy.ndarray x: x value or range of x
         If x stands for x-range, the length of x must be 2
         If x is instance of numpy.ndarray, the x must be column vector
-    :param model model: float value predicative model
+    :param model_or_numpy.ndarray model_or_y: predicative model or y value
         All functions are possilble to use if it works like
 
             y = model(x)
+
+        Or numpy.ndarray column vector
 
     :param bokeh.plotting.figure.Figure p: Figure to overlay line
     :param int n_steps: The number of points in x
@@ -245,7 +247,10 @@ def overlay_regression_line(x, model, p, n_steps=2, margin=0.025,
         if x.shape[1] > 1:
             raise ValueError(f'x must be 1D data, however the shape of input is {x.shape}')
         x_ = x.copy()
-        x_.sort(axis=0)
+        sorting_indices = x_.argsort(axis=0).reshape(-1)
+        x_ = x_[sorting_indices]
+        print(x_.shape)
+        print(sorting_indices.shape)
     elif len(x) != 2:
         raise ValueError(f'x must be numpy.ndarray column vector or range, however the length of x is {len(x)}')
     else:
@@ -253,8 +258,14 @@ def overlay_regression_line(x, model, p, n_steps=2, margin=0.025,
         x_min, x_max = x_min - margin, x_max + margin
         x_ = np.linspace(x_min, x_max, n_steps).reshape(-1,1)
 
-    # (n_data, 1) -> (n_data, 1)
-    y_pred = model(x_)
+    if isinstance(model_or_y, np.ndarray):
+        y_pred = model_or_y.copy()
+        if not isinstance(x, np.ndarray):
+            raise ValueError(f'x should be numpy.ndarray when y is numpy.ndarray instance')
+        y_pred = y_pred[sorting_indices]
+    else:
+        # (n_data, 1) -> (n_data, 1)
+        y_pred = model_or_y(x_)
 
     # as column vector
     x_ = x_.reshape(-1)
