@@ -19,6 +19,6 @@ setup(
     install_requires=requires,
     packages=find_packages(),
     package_data={
-        'lovit_analytics_introduction':[]
+        'lovit_analytics_introduction':['data/datafile/*']
     },
 )
