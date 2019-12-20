@@ -16,3 +16,5 @@ tmp/
 
 # Jupyter notebook
 .ipynb_checkpoints/
+*-Copy*.ipynb
+
