@@ -415,6 +415,8 @@ def generate_svr_data(n_data=200, n_repeats=5):
 
     Returns
     -------
+    Random seed is fixed with 0
+
     x_line : numpy.ndarray
         Shape = (n_data,)
         Array of [0, 1, 2, ... n_data-1]
@@ -439,3 +441,38 @@ def generate_svr_data(n_data=200, n_repeats=5):
     y = np.concatenate([y_line + np.random.randn(n_data) for _ in range(n_repeats)])
 
     return x_line, x, y_line, y
+
+def net_parameter_compression_ratio(model, X):
+    """
+    Arguments
+    ---------
+    model : sklearn.neural_net.MLPRegressor
+        Trained neural network model
+    X : numpy.ndarray
+        Data to be compute ratio between size of data and parameters.
+
+    Returns
+    -------
+    times : float
+        The proportion of size between trained data and model parameters
+
+    Usage
+    -----
+    Train neural network model
+
+        >>> from sklearn.neural_network import MLPRegressor
+
+        >>> mlp = MLPRegressor(hidden_layer_sizes=(200, 5), solver='adam', activation='tanh', max_iter=1000)
+        >>> mlp.fit(X, y)
+
+    To compute efficiency of neural net
+
+        >>> times = net_parameter_compression_ratio(mlp, X)
+        >>> print(f'size of parameter / data = x {times:.4}')
+    """
+
+    times = 0
+    for h in model.coefs_:
+        times += h.shape[0] * h.shape[1]
+    times /= (X.shape[0] * X.shape[1])
+    return times
