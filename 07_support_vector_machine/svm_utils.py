@@ -247,6 +247,40 @@ def draw_activate_image(model, X, resolution=100, height=600, width=600,
 
     return p
 
+def append_rbf_radial_basis(rbf_svm, X, label, gamma, p,
+    threshold=0.05, circle_alpha=0.3):
+    """
+    Arguments
+    ---------
+    rbf_svm : sklearn.svm.BaseSVC
+        Trained support vector classifier model with `kernel='rbf'`
+    X : numpy.ndarray
+        Data to be plotted. It will be used to set `x_range` and `y_range`
+        Shape of X = (n_data, 2)
+    label : numpy.ndarray
+        Shape = (n_data,)
+    gamma : float
+        Gamma of RBF kernel, K(x,y) = exp(-gamma(|x - y|_2^2)
+    p : bokeh.plotting.Figure
+        Initialized figure
+    threshold : float
+        Threshold of K(x,y). The smaller `threshold` leads the larger rbf basis circle.
+    circle_alpha : float
+        0 < `circle_alpha` < 1
+        Transparency of circle.
+
+    Returns
+    -------
+    p : bokeh.plotting.Figure
+        RBF basis circles appended figure
+    """
+
+    radius = -np.log(threshold) / gamma
+    X_sv = X[rbf_svm.support_]
+    label_sv = label[rbf_svm.support_]
+    p = append_circles(X_sv, label_sv, radius, p, alpha=circle_alpha)
+    return p
+
 def scatterplot_timeseries(x, y, y_line=None, height=400, width=800, title=None,
     p=None, margin=2.0, point_color='grey', line_color='#2b83ba', size=2):
     """
