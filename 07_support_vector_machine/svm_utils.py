@@ -403,3 +403,39 @@ def generate_svc_data(n_data=50, p_noise=0.0):
     label = label[indices][:n_data]
 
     return X, label
+
+def generate_svr_data(n_data=200, n_repeats=5):
+    """
+    Arguments
+    ---------
+    n_data : int
+        The number of generated points
+    n_repeats : int
+        The size of x = n_data * n_repeats
+
+    Returns
+    -------
+    x_line : numpy.ndarray
+        Shape = (n_data,)
+        Array of [0, 1, 2, ... n_data-1]
+    x : numpy.ndarray
+        Shape = (n_data * n_repeats,)
+        Array of [0, 1, 2, ... n_data-1, 0, 1, 2, ... n_data-1, ...]
+    y_line : numpy.ndarray
+        Shape = (n_data,)
+        Timeseries type column vector
+    y : numpy.ndarray
+        Shape = (n_data * n_repeats,)
+        y_base += noise
+
+    Usage
+    -----
+    """
+
+    np.random.seed(0)
+    x_line = np.arange(n_data)
+    x = np.concatenate([x_base for _ in range(n_repeats)])
+    y_line = np.random.randn(n_data).cumsum()
+    y = np.concatenate([y_line + np.random.randn(n_data) for _ in range(n_repeats)])
+
+    return x_line, x, y_line, y
