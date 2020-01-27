@@ -296,3 +296,76 @@ def scatterplot_timeseries(x, y, y_line=None, height=400, width=800, title=None,
         p.line(x=x[:y_line.shape[0]], y=y_line, line_width=1, color=line_color, alpha=0.5)
 
     return p
+
+def generate_svc_data(n_data=50, p_noise=0.0):
+    """
+    Arguments
+    ---------
+    n_data : int
+        The number of generated points
+    p : float
+        Proportion of noise data
+
+    Returns
+    -------
+    X : numpy.ndarray
+        Shape = (n_data, 2)
+        The random seed is fixed with 0
+    label : numpy.ndarray
+        Shape = (n_data,)
+
+    Usage
+    -----
+    To generate toy data
+
+        >>> X, label = generate_svc_data(n_data=50, p_noise=0.0)
+
+    Remove three points to make linear separable dataset
+
+        >>> subindices = np.array([i for i in range(50) if not i in [8, 13, 14]])
+        >>> X_ = X[subindices]
+        >>> label_ = label[subindices]
+
+    Train linear SVM
+
+        >>> from sklearn.svm import SVC
+        >>> svm = SVC(C=10.0, kernel='linear')
+        >>> svm.fit(X_, label_)
+
+    Train RBF kernel SVM
+
+        >>> svm = SVC(C=10.0, kernel='rbf')
+        >>> svm.fit(X, label)
+
+    Draw scatter plot overlapped with activation map
+
+        >>> from bokeh.plotting import show
+
+        >>> sv = np.zeros(X.shape[0], dtype=np.int)
+        >>> sv[svm.support_] = 1
+        >>> decision = svm.decision_function(X)
+
+        >>> p = draw_activate_image(svm, X, resolution=500, decision=True)
+        >>> p = scatterplot_2class(X, label, sv, decision, p=p, size=10)
+        >>> show(p)
+    """
+    np.random.seed(0)
+    X = np.random.random_sample((n_data*2, 2))
+    label = np.zeros(n_data*2, dtype=np.int)
+
+    # set label
+    dist = np.linalg.norm(X - np.array([0.4, 0.9]), axis=1)
+    label[(0.35 < dist) & (dist <= 0.4)] = -1
+    label[(0.4 < dist) & (dist < 0.9)] = 1
+    label[(0.9 <= dist)] = -1
+
+    if (n_data * p_noise) > 0:
+        n_noise = int(label.shape[0] * p_noise)
+        indices = np.random.permutation(n_noise)[:n_noise]
+        label[indices] = np.random.randint(0, 2, n_noise)
+
+    indices = np.where(label >= 0)[0]
+    X = X[indices][:n_data]
+    label = label[indices][:n_data]
+
+    return X, label
