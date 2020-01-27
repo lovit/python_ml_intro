@@ -436,7 +436,7 @@ def generate_svr_data(n_data=200, n_repeats=5):
 
     np.random.seed(0)
     x_line = np.arange(n_data)
-    x = np.concatenate([x_base for _ in range(n_repeats)])
+    x = np.concatenate([x_line for _ in range(n_repeats)])
     y_line = np.random.randn(n_data).cumsum()
     y = np.concatenate([y_line + np.random.randn(n_data) for _ in range(n_repeats)])
 
