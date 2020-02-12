@@ -1,3 +1,5 @@
+from . import svm
+
 from ._bokeh import draw_activate_image
 from ._bokeh import scatterplot_2class
 from .bokeh import scatterplot
