@@ -1,6 +1,14 @@
 # 패스트캠퍼스, 파이썬을 이용한 머신러닝 입문 실습 코드
 
 강의 내용이 수정되면 `git pull origin master` 를 실행하세요.
+이전에 아래 코드로 변경된 부분을 돌려주세요
+
+```
+git status
+git checkout .
+git checkout FILE_NAME
+git pull origin master
+```
 
 강의노트는 [lecture_notes](lecture_notes/) 에 포함되어 있으며, 각 주제별 파이썬 실습 코드는 숫자별로 각각의 폴더에 나뉘어져 있습니다. 각 실습 코드 폴더의 README 에는 해당 튜토리얼을 통하여 배우길 기대하는 내용이 기술되어 있습니다.
 
