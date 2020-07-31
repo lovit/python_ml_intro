@@ -1,6 +1,10 @@
 # keras models
 *.h5
 
+# scikit-learn model
+*.joblib
+*.pkl
+
 # TODO
 sklearn_nn_partial_fit_classifier*
 sklearn_nn_timeseries_prediction*
